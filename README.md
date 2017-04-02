@@ -19,3 +19,9 @@ be a license specified.
 
 If none is specified assume Open Domain license.
  
+
+
+# FAQ:
+
+##Why are they not just a .h file?
+This is done in order to make them easier to include. No need to have "#define IMPLEMENT_TINY_TERM" and such anywhere in your code, just include the .h file and you are good to go
