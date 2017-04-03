@@ -70,7 +70,8 @@ int main(int argc, char* args[])
 
 	// Now lets just render to our screen
 	SDL_LockSurface(screen);
-	term_render_image_sdl(&term, screen->pixels, screen->pitch, &font);
+	// The 1 at the end means we want to use blending
+	term_render_image_sdl(&term, screen->pixels, screen->pitch, &font, 1);
 	SDL_UnlockSurface(screen);
 
 	SDL_Flip(screen);
@@ -117,7 +118,7 @@ You have multiple ways to render your image.
 
 ##### Using termImage
 -----
-If you are willing to use OpenGL or the output system you are using does not allow writing to its textures you should use ``int term_render_image(termScreen* scr, termImage* outImage, termFont* font)``, it will render your screen to a given image (which you must create properly using the ``termImage term_create_image(int w, int h)`` function, make sure your image is big enough!) using the given font.
+If you are willing to use OpenGL or the output system you are using does not allow writing to its textures you should use ``int term_render_image(termScreen* scr, termImage* outImage, termFont* font, int blending)``, it will render your screen to a given image (which you must create properly using the ``termImage term_create_image(int w, int h)`` function, make sure your image is big enough!) using the given font.
 
 The data contained by ``termImage`` is simply a char array in R-G-B order.
 
@@ -126,7 +127,7 @@ You can load a ``termImage`` into OpenGL with the macro ``term_upload_gl_image(i
 
 ##### Direct output to your texture (sdl, sfml, etc...)
 ------
-``void term_render_image_sdl(termScreen* scr, char* pixels, int pitch, termFont* font)`` will render your image and output to the given char array directly. 
+``void term_render_image_sdl(termScreen* scr, char* pixels, int pitch, termFont* font, int blending)`` will render your image and output to the given char array directly. 
 
 ``pitch`` is the length of a row of pixels in bytes. In SDL it's as simple to get as ``surface->pitch``, for SFML or your own texture type you should use ``width * bpp``.
 
@@ -143,8 +144,8 @@ Will set character at (x, y) to char nChar. Returns an error code
 ###### ``termChar* term_get_char(termScreen* sc, int x, int y)``
 Will return the character at (x, y) or null.
 
-###### ``int term_render_image(termScreen* scr, termImage* outImage, termFont* font)``
-Will render a termScreen to a termImage using the given font.
+###### ``int term_render_image(termScreen* scr, termImage* outImage, termFont* font, int blending)``
+Will render a termScreen to a termImage using the given font. Blending will use blending if set to 1 and disable it if set to 0
 
 ###### ``termFont term_load_font(char* data, int data_size, int width, int charW, int charH, int alphaChannel)``
 Will load a font from a pixel array of either 24/32 bpp data. 
