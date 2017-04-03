@@ -127,6 +127,10 @@ You can load a ``termImage`` into OpenGL with the macro ``term_upload_gl_image(i
 
 ``pitch`` is the length of a row of pixels in bytes. In SDL it's as simple to get as ``surface->pitch``, for SFML or your own texture type you should use ``width * bpp``.
 
+##### Warning!
+Keep in mind that if your output buffer is too small the function will probably crash your program!
+``term_render_image_sdl`` can only check that your image is wide enough, but can't do anything about height, so please make sure your buffers are big enough!
+
 
 ### Function documentation
 
