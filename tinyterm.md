@@ -84,6 +84,10 @@ Result:
 
 ![Result of the code](http://imgur.com/z6JlpKk.png)
 
+### Plans:
+
+- Add a hardware renderer (Either using openGL or making you give the renderer the functions to draw primitives)
+
 ## Documentation
 ------
 
