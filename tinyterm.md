@@ -80,7 +80,7 @@ int main(int argc, char* args[])
 }
 ```
 
-Result: http://imgur.com/z6JlpKk.png
+Result: ![Result of the code](http://imgur.com/z6JlpKk.png)
 
 ## Documentation
 ------
