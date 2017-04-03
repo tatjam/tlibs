@@ -86,7 +86,7 @@ int main(int argc, char* args[])
 
 Result: 
 
-![Result of the code](http://imgur.com/z6JlpKk.png)
+![Result of the code](http://imgur.com/ikdp08k.png)
 
 ### Plans:
 
