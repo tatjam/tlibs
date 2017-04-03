@@ -80,6 +80,8 @@ int main(int argc, char* args[])
 }
 ```
 
+Result: http://imgur.com/z6JlpKk.png
+
 ## Documentation
 ------
 
