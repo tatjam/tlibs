@@ -12,7 +12,7 @@ Each library comes with a .md file documenting it and showing example usage
 
 # List:
 
- - TinyTerm: A lightweight software rendered RGB terminal (tinyterm.h)
+ - [TinyTerm](https://github.com/tatjam/tlibs/blob/master/tinyterm.md): A lightweight software rendered RGB terminal (tinyterm.h)
  
 # License:
    
