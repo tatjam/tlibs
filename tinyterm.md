@@ -8,7 +8,7 @@ It is as lightweight as it can be only doing basic text rendering, all the rest 
 ### Features
 -----
 
-###### Fast Software Renderer
+##### Fast Software Renderer
 The renderer is fast and as easy to use as calling a single function.
 It will output to a pixel array (either a ``termImage`` or any of the supported formats, read below) that you must create beforehand.
 The cost of the rendering is proportional to the size of your ``termScreen``, so keep in mind using huge terminals might cause perfomance issues.
