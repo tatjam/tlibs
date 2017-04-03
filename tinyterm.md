@@ -1,4 +1,4 @@
-# Tinyterm.h
+# Tinyterm.h  (NOT FINISHED YET, LACKING SFML OUTPUT AND SOME TESTING)
 
 >Tinyterm is a quick and simple multi-platform, no dependency, library independent RGB terminal rendering engine.
 
