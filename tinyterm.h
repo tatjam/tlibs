@@ -94,7 +94,8 @@ glBindTexture(GL_TEXTURE_2D, 0); \
 
 int term_set_char(termScreen* sc, int x, int y, termChar nChar);
 termChar* term_get_char(termScreen* sc, int x, int y);
-int term_render_image(termScreen* scr, termImage* outImage, termFont* font);
+int term_render_image(termScreen* scr, termImage* outImage, termFont* font, int blending);
+int term_render_image_sdl(termScreen* scr, char* pixels, int pitch, termFont* font, int blending);
 termFont term_load_font(char* data, int data_size, int width, int charW, int charH, int alphaChannel);
 termImage term_create_image(int w, int h);
 char* term_get_printable(termScreen* scr);
@@ -103,7 +104,6 @@ termBitImage term_create_bit_image(char* data, int data_size, int width);
 int term_define_font_character(int characterN, termFont* f, termBitImage img);
 termFont term_create_font(int charW, int charH, int characterCount);
 termScreen term_create_screen(int w, int h);
-
 
 // The termFont will keep existing but all the data will be removed
 void term_free_font(termFont* font);
@@ -284,7 +284,7 @@ termFont term_load_font(char* data, int data_size, int width, int charW, int cha
 		height = data_size / 4 / width;
 	}
 
-	out.totalCharacters = width / charW * height / charH;
+	out.totalCharacters = (width / charW) * (height / charH);
 
 	out.characters = (termBitImage*)calloc(out.totalCharacters, sizeof(termBitImage));
 
@@ -294,9 +294,9 @@ termFont term_load_font(char* data, int data_size, int width, int charW, int cha
 	int i = 0;
 
 
-	for (int y = 0; y < charactersPerRow; y++)
+	for (int y = 0; y < charactersPerColumn; y++)
 	{
-		for (int x = 0; x < charactersPerColumn; x++)
+		for (int x = 0; x < charactersPerRow; x++)
 		{
 			termBitImage tbi = term_create_bit_image(NULL, charW * charH, charW);
 
@@ -338,7 +338,7 @@ termFont term_load_font(char* data, int data_size, int width, int charW, int cha
 
 // Renders screen to image. If arguments are invalid no operation will be done
 // Returns an error code
-int term_render_image(termScreen* scr, termImage* outImage, termFont* font)
+int term_render_image(termScreen* scr, termImage* outImage, termFont* font, int blending)
 {
 	if (outImage->width < scr->width * font->width || outImage->height < scr->height * font->height)
 	{
@@ -368,9 +368,18 @@ int term_render_image(termScreen* scr, termImage* outImage, termFont* font)
 					{
 						if (font->characters[c->character].data[sI] != 0)
 						{
-							outImage->data[screenI * 3] = (unsigned char)c->fr;
-							outImage->data[screenI * 3 + 1] = (unsigned char)c->fg;
-							outImage->data[screenI * 3 + 2] = (unsigned char)c->fb;
+							if (blending)
+							{
+								outImage->data[screenI * 3] = c->fr * ((float)((unsigned char)font->characters[c->character].data[sI]) / 255.f);
+								outImage->data[screenI * 3 + 1] = c->fg * ((float)((unsigned char)font->characters[c->character].data[sI]) / 255.f);
+								outImage->data[screenI * 3 + 2] = c->fb * ((float)((unsigned char)font->characters[c->character].data[sI]) / 255.f);
+							}
+							else
+							{
+								outImage->data[screenI * 3] = (unsigned char)c->fr;
+								outImage->data[screenI * 3 + 1] = (unsigned char)c->fg;
+								outImage->data[screenI * 3 + 2] = (unsigned char)c->fb;
+							}
 						}
 						else
 						{
@@ -422,8 +431,17 @@ void term_free_screen(termScreen* scr)
 // Make sure, if the surface requires locking, to lock it!
 // It can also work with any data structure similar to SDL surfaces
 // ByteOrder defaults to big indean but make sure SDL defines it properly!
-void term_render_image_sdl(termScreen* scr, char* pixels, int pitch, termFont* font)
+// Please make sure your surface is big enough so you dont get memory read errors!
+int term_render_image_sdl(termScreen* scr, char* pixels, int pitch, termFont* font, int blending)
 {
+
+	// pitch / 3 is width in pixels
+	// 3 is the bpp
+	if (pitch / 3 < scr->width * font->width)
+	{
+		return TERM_INVALID_ARGUMENT;
+	}
+
 	for (int x = 0; x < scr->width; x++)
 	{
 		for (int y = 0; y < scr->height; y++)
@@ -441,33 +459,58 @@ void term_render_image_sdl(termScreen* scr, char* pixels, int pitch, termFont* f
 				{
 
 					int sI = sY * font->width + sX;
-					unsigned char* dpt = (unsigned char*)pixels + (y * font->width + sY) *
+					unsigned char* dpt = (unsigned char*)pixels + (y * font->height + sY) *
 						pitch +
 						(x * font->width + sX) *
 						3; //3 is the BPP
 
+					unsigned char ccc = font->characters[c->character].data[sI];
+					//printf("%u\n", ccc);
 					if (font->totalCharacters > c->character && c->character >= 0)
 					{
 						if (font->characters[c->character].data[sI] != 0)
 						{
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
-							dpt[0] = c->fr;
-							dpt[1] = c->fg;
-							dpt[2] = c->fb;
+							if (blending == 1)
+							{
+								dpt[2] = c->fb * ((float)((unsigned char)font->characters[c->character].data[sI]) / 255.f);
+								dpt[1] = c->fg * ((float)((unsigned char)font->characters[c->character].data[sI]) / 255.f);
+								dpt[0] = c->fr * ((float)((unsigned char)font->characters[c->character].data[sI]) / 255.f);
+							}
+							else
+							{
+								dpt[2] = c->fb;
+								dpt[1] = c->fg;
+								dpt[0] = c->fr;
+
+							}
 #else
-							dpt[0] = c->fb;
-							dpt[1] = c->fg;
-							dpt[2] = c->fr;
+							if (blending == 1)
+							{
+								dpt[0] = c->fb * ((float)((unsigned char)font->characters[c->character].data[sI]) / 255.f);
+								dpt[1] = c->fg * ((float)((unsigned char)font->characters[c->character].data[sI]) / 255.f);
+								dpt[2] = c->fr * ((float)((unsigned char)font->characters[c->character].data[sI]) / 255.f);
+							}
+							else
+							{
+								dpt[0] = c->fb;
+								dpt[1] = c->fg;
+								dpt[2] = c->fr;
+
+							}
 #endif			
 						}
 						else
 						{
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
 							dpt[0] = c->br;
 							dpt[1] = c->bg;
 							dpt[2] = c->bb;
+#else
 							dpt[0] = c->bb;
 							dpt[1] = c->bg;
 							dpt[2] = c->br;
+#endif
 						}
 					}
 					else
@@ -487,5 +530,7 @@ void term_render_image_sdl(termScreen* scr, char* pixels, int pitch, termFont* f
 			}
 		}
 	}
+
+	return TERM_NO_ERROR;
 }
 #endif
