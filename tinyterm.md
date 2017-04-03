@@ -107,7 +107,7 @@ You must also create a font, you are recommended to use the
 ``int charH`` is the height of each character.
 ``int alpha`` should be 1 if you are using an image with alpha channel (RGBA) and 0 if it's RGB
 
-Now everything is ready to do, to set chars you can either use ``int term_set_char(termScreen* sc, int x, int y, termChar nChar)`` if you are using (x, y) coodinates or you can also directly access the termScreen, to do this use ``termChar* scrChar = &term.chars[index]``. ScrChar will point to the character at index and mofifying it will change the data on the terminal.
+Now everything is ready to do, to set chars you can either use ``int term_set_char(termScreen* sc, int x, int y, termChar nChar)`` if you are using (x, y) coodinates or you can also directly access the termScreen, to do this use ``termChar* scrChar = &term.chars[index]``. ScrChar will point to the character at index and modifying it will change the data on the terminal.
 
 
 You have multiple ways to render your image. 
