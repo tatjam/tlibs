@@ -8,9 +8,11 @@ They are designed with being quick and easy to use in mind, and are as easy to
 use as including them onto your program.
 
 
+Each library comes with a .md file documenting it and showing example usage
+
 # List:
 
- - TinyTerm: A lightweight software rendered RGB terminal (tinyterm.h and tinyterm.c)
+ - TinyTerm: A lightweight software rendered RGB terminal (tinyterm.h)
  
 # License:
    
