@@ -147,6 +147,11 @@ Will return the character at (x, y) or null.
 ###### ``int term_render_image(termScreen* scr, termImage* outImage, termFont* font, int blending)``
 Will render a termScreen to a termImage using the given font. Blending will use blending if set to 1 and disable it if set to 0
 
+###### ``int term_render_image_sdl(termScreen* scr, char* pixels, int pitch, termFont* font, int blending)``
+Will render a termScreen to a pixel array using the given font. Blending will use blending if set to 1 and disable it if set to 0
+``pitch`` is the lenght of a row of pixels in bytes. ``width*bpp``
+
+
 ###### ``termFont term_load_font(char* data, int data_size, int width, int charW, int charH, int alphaChannel)``
 Will load a font from a pixel array of either 24/32 bpp data. 
 ``data_size`` is ``width*height*bpp``. 
