@@ -4,6 +4,9 @@
 
 It is as lightweight as it can be only doing basic text rendering, all the rest is for you to manage. (There are no ``println`` functions, you are only given direct access to a character array).
 
+###### Keep in mind
+
+The functions are not safe, if you give it a buffer too small to fit the render it will just silently fail, probably crashing your program. Always make sure your buffers are big enough before feeding into ``term_render_[wathever]``!!
 
 ### Features
 -----
