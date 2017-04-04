@@ -190,6 +190,10 @@ Creates empty screen (all characters are 0)
 ###### ``void term_free_bimage(termBitImage* img)``
 ###### ``void term_free_screen(termScreen* scr)``
 
+## Changelog:
+
+[RIGHT NOW] V0.9 -> Testing before first release
+
 ## Blending Example (Using CowThing's texture pack for Dwarf Fortress: [Tergel](http://www.bay12forums.com/smf/index.php?PHPSESSID=f9f82e2fad9ca6c97947053892c3f5a7&topic=145802.0))
 
 ![IMG](http://imgur.com/AFKhomo.png)
