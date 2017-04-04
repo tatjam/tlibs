@@ -101,13 +101,13 @@ Result:
 
 #### Basic Usage Guide
 
-Every single file that you want to use tinyterm must have a ``#include "tinyterm.h`` in it.
+Every single file that you want to use tinyterm must have a ``#include "tinyterm.h"`` in it.
 On your project there should be atleast one ``.c``/``.cpp`` file that contains:
 ```C
 #define TERM_INCLUDE_IMPLEMENTATION
 #include "tinyterm.h"
 ```
-That is required because there are both implementation and definitions in the .h file!
+That is required because, without TERM_INCLUDE_IMPLEMENTATION defined only the definitions will be included, this is required as the library is just one .h file.
 
 Every program that uses tinyterm.h will have to create a ``termScreen`` and a ``termFont``, and must have a way to draw a pixel array (SDL, OpenGL, SFML, .png writer, etc...).
 
