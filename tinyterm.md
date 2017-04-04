@@ -27,6 +27,7 @@ Note that we are directly writing to the video buffer!
 ```C
 #include "SDL.h"
 
+// We have to include our definition
 #define TERM_INCLUDE_DEFINITION
 #include  "tinyterm.h"
 
@@ -99,6 +100,14 @@ Result:
 ------
 
 #### Basic Usage Guide
+
+Every single file that you want to use tinyterm must have a ``#include "tinyterm.h`` in it.
+On your project there should be atleast one ``.c``/``.cpp`` file that contains:
+```C
+#define TERM_INCLUDE_IMPLEMENTATION
+#include "tinyterm.h"
+```
+That is required because there are both implementation and definitions in the .h file!
 
 Every program that uses tinyterm.h will have to create a ``termScreen`` and a ``termFont``, and must have a way to draw a pixel array (SDL, OpenGL, SFML, .png writer, etc...).
 
