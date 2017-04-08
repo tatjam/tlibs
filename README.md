@@ -1,4 +1,4 @@
-# Tlibs (Tajamsoft Libs)
+# Tlibs (Tiny Libs)
 
 Tlibs are free to use (Public Domain) C/C++ libraries. 
 They consist of only one .h file (maybe some will require also a .c file)
