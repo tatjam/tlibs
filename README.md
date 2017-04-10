@@ -13,7 +13,7 @@ Each library comes with a .md file documenting it and showing example usage
 # List:
 
  - [TinyTerm](https://github.com/tatjam/tlibs/blob/master/tinyterm.md): A lightweight software rendered RGB terminal (tinyterm.h)
- - [TinyGL](https://github.com/tatjam/NOT_YET_UPLOADED): Create and manage windows/GL context really easy and fast. Similar to GLFW
+ - [TinyGL](https://github.com/tatjam/tlibs/blob/master/tinygl.md): Create and manage windows/GL context really easy and fast. Similar to GLFW
  
 # License:
    
